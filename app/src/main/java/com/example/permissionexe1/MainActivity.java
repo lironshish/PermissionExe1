@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText EDT_name;
     private MaterialButton BTN_login;
     private static BatteryManager myBatteryManager;
+    private ConnectivityManager connManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +41,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(getBatteryPercentage() > 50)
                     Log.d("ppt", getBatteryPercentage() + "");
-
+                if(isWifiConnect()){
+                    Log.d("ppt", "Wifi connect");
+                }
             }
+
         });
     }
 
     private void initSystemServices(Context context) {
+        // Battery Service
         myBatteryManager =  (BatteryManager) context.getSystemService(BATTERY_SERVICE);
+        //Connectivity Service
+        connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     private void findViews() {
@@ -54,4 +64,13 @@ public class MainActivity extends AppCompatActivity {
     public static int getBatteryPercentage() {
         return myBatteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
     }
+
+
+    public boolean isWifiConnect(){
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return mWifi.isConnected();
+    }
+
+
+
 }
