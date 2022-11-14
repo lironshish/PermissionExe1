@@ -1,20 +1,17 @@
 package com.example.permissionexe1;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -24,7 +21,11 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton BTN_login;
     private static BatteryManager myBatteryManager;
     private ConnectivityManager connManager;
+    private BluetoothAdapter bluetoothadapter;
 
+
+
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +40,15 @@ public class MainActivity extends AppCompatActivity {
         BTN_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intent = getIntent();
                 if(getBatteryPercentage() > 50)
                     Log.d("ppt", getBatteryPercentage() + "");
                 if(isWifiConnect()){
                     Log.d("ppt", "Wifi connect");
+                }
+                if(isBluetoothEnable()){
+                    Log.d("ppt", "Bluetooth connect");
+
                 }
             }
 
@@ -50,10 +56,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSystemServices(Context context) {
-        // Battery Service
+        //Battery Service
         myBatteryManager =  (BatteryManager) context.getSystemService(BATTERY_SERVICE);
         //Connectivity Service
         connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        //Bluetooth Adapter
+        bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
+
+
     }
 
     private void findViews() {
@@ -71,6 +81,12 @@ public class MainActivity extends AppCompatActivity {
         return mWifi.isConnected();
     }
 
+    public boolean isBluetoothEnable(){
+        if(bluetoothadapter.isEnabled())
+            return true;
+        else
+            return false;
 
+    }
 
 }
