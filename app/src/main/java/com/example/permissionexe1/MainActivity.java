@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         BTN_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(EDT_name.getText().equals("")){
+                if(EDT_name.getText().toString().isEmpty()){
                     Toast.makeText(MainActivity.this,"Please fill in your name",Toast.LENGTH_SHORT).show();
                 }else if(checkConditions(MainActivity.this))
                  Toast.makeText(MainActivity.this,"login successfully",Toast.LENGTH_SHORT).show();
